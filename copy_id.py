@@ -1,25 +1,54 @@
 import os
+import string
 
 def setup(hosts):
-    # for host in hosts:
-    #     for i in range(33):
-    #         cmd = " \"ssh-keygen -f \"/users/luca_mul/.ssh/known_hosts\" -R node" + str(i) + "\""
-    #         os.system("ssh -o StrictHostKeyChecking=no " + host + cmd)
-    # return
-    # for host in hosts:
-    #     host = host.split("@")[1]
-    #     os.system("ssh-keygen -f \"/home/luca/.ssh/known_hosts\" -R \"" + host + "\"")
-    # cmd = " \"rm -r /local/Eiger-PORT/ ; cd /local ; git clone https://github.com/princeton-sns/Eiger-PORT.git ; cd Eiger-PORT ; ./install-dependencies.bash ; cd Eiger-PORT ; ant ; ant ; ant ; cd tools/stress ; ant ; cd ../../../eiger ; ant ; ant ; ant  ; cd tools/stress ; ant\""
-    #cmd = " \"sudo sed -i 's/^#MaxStartups/MaxStartups/g' /etc/ssh/sshd_config ; sudo sed -i 's/#ClientAliveInterval 0/ClientAliveInterval 0/g' /etc/ssh/sshd_config && sudo sed -i 's/#ClientAliveCountMax 3/ClientAliveCountMax 0/g' /etc/ssh/sshd_config ; sudo systemctl restart ssh\""
-    cmd = " \" sudo usermod -s /bin/bash luca_mul ; cd /local ; sudo rm -r ./* ; git clone https://github.com/princeton-sns/Eiger-PORT.git ; sed -i 's/node-/node/g' /local/Eiger-PORT/eval-scripts/vicci_dcl_config/16_clients_in_kodiak /local/Eiger-PORT/eval-scripts/vicci_dcl_config/16_in_kodiak ; cd Eiger-PORT ; ./install-dependencies.bash ; cd Eiger-PORT ; ant ; ant ; ant ; ant; cd tools/stress ; ant ; cd ../../../eiger ; ant ; ant ; ant  ; ant ; cd tools/stress ; ant\""
+    for host in hosts:
+        username, domain = host.split("@")
+        cmd = "ssh-keygen -f \"/home/luca/.ssh/known_hosts\" -R \"" +  domain + "\""
+        os.system(cmd)
+    cmd = " \" sudo usermod -s /bin/bash luca_mul ; cd /local ; sudo rm -r ./* ; git clone https://github.com/lucamul/EIGER_PORT.git ; mv /local/EIGER_PORT/* /local ; sudo rm -r EIGER_PORT ; sed -i 's/node-/node/g' /local/Eiger-PORT/eval-scripts/vicci_dcl_config/16_clients_in_kodiak /local/Eiger-PORT/eval-scripts/vicci_dcl_config/16_in_kodiak ; cd Eiger-PORT ; ./install-dependencies.bash ; cd Eiger-PORT ; ant ; ant ; ant ; ant; cd tools/stress ; ant ; cd ../../../eiger ; ant ; ant ; ant  ; ant ; cd tools/stress ; ant\""
     for host in hosts:
         print(host)
         os.system("ssh -o StrictHostKeyChecking=no " + host + cmd)
 
 
+hosts_port_plus = [
+"luca_mul@pc504.emulab.net",		
+"luca_mul@pc518.emulab.net",		
+"luca_mul@pc507.emulab.net",		
+"luca_mul@pc488.emulab.net",		
+"luca_mul@pc482.emulab.net",		
+"luca_mul@pc480.emulab.net",		
+"luca_mul@pc536.emulab.net",		
+"luca_mul@pc549.emulab.net",		
+"luca_mul@pc431.emulab.net",		
+"luca_mul@pc545.emulab.net",		
+"luca_mul@pc473.emulab.net",		
+"luca_mul@pc557.emulab.net",		
+"luca_mul@pc436.emulab.net",		
+"luca_mul@pc516.emulab.net",		
+"luca_mul@pc538.emulab.net",		
+"luca_mul@pc521.emulab.net",		
+"luca_mul@pc542.emulab.net",		
+"luca_mul@pc500.emulab.net",		
+"luca_mul@pc541.emulab.net",		
+"luca_mul@pc487.emulab.net",		
+"luca_mul@pc476.emulab.net",		
+"luca_mul@pc512.emulab.net",		
+"luca_mul@pc553.emulab.net",		
+"luca_mul@pc534.emulab.net",		
+"luca_mul@pc522.emulab.net",		
+"luca_mul@pc508.emulab.net",		
+"luca_mul@pc550.emulab.net",		
+"luca_mul@pc529.emulab.net",		
+"luca_mul@pc552.emulab.net",		
+"luca_mul@pc420.emulab.net",		
+"luca_mul@pc503.emulab.net",		
+"luca_mul@pc427.emulab.net",		
+"luca_mul@pc535.emulab.net"	
+]
 
-
-hosts1 = [
+hosts_port = [
 "luca_mul@pc428.emulab.net",		
 "luca_mul@pc433.emulab.net",		
 "luca_mul@pc417.emulab.net",		
@@ -55,4 +84,4 @@ hosts1 = [
 "luca_mul@pc425.emulab.net"
 ]
 
-setup(hosts1)
+setup(hosts_port_plus)

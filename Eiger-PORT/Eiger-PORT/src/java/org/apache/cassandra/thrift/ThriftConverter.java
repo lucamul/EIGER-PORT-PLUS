@@ -436,69 +436,10 @@ public class ThriftConverter {
                     return new ChosenColumnResult(thriftifyIColumn(column), new HashSet<Long>());
                 }
                 if (column.earliestValidTime() <= chosenTime) {
-                    // this column satisfies read_ts
-                    if (column.client_id() != client_id || true) { // HERE !!! EDITLUCA !!!!
-                        // this version was written by some other client, safe to return
-                        logger.info("xxstalenessxx: " + 0);
-                        return new ChosenColumnResult(thriftifyIColumn(column), new HashSet<Long>());
-                    } else {
-                        // this version was written by the same client of this read, need to handle it with care
-                        Iterator<IColumn> versionItr = column.previousVersions().iterator();
-                        assert versionItr.hasNext() : "This column should have old versions!";
-                        IColumn checkedColumn = checkForIsolation(versionItr, column.client_id(), column.gst(), chosenTime, 0L);
-                        if (checkedColumn == null) {
-                            // okay to return this column
-                            logger.info("xxstalenessxx: " + 0);
-                            return new ChosenColumnResult(thriftifyIColumn(column), new HashSet<Long>());
-                        } else {
-                            // return the checked column, which is an old version by another client
-                            return new ChosenColumnResult(thriftifyIColumn(checkedColumn), new HashSet<Long>());
-                        }
-                    }
-                }
-                // now we need to look for the right column in old versions
-                Iterator<IColumn> versionItr = column.previousVersions().iterator();
-                IColumn oldColumn = null;
-                IColumn checkedColumn = null;
-                IColumn lastColumn = null;
-                while (versionItr.hasNext()) {
-                    oldColumn = versionItr.next();
-                    if (oldColumn.client_id() == client_id) {
-                        // this version is from the same client, need care
-                        long staleness_time = lastColumn == null ? System.currentTimeMillis() - column.create_time()
-                                : System.currentTimeMillis() - lastColumn.create_time();
-                        checkedColumn = checkForIsolation(versionItr, oldColumn.client_id(), oldColumn.gst(), chosenTime, staleness_time);
-                        if (checkedColumn == null) {
-			    if (lastColumn == null && (column instanceof PendingTransactionColumn)) {
-                                logger.info("xxstalenessxx: " + 0);
-                            } else if (lastColumn == null && !(column instanceof PendingTransactionColumn)) {
-                                logger.info("xxstalenessxx: " + (System.currentTimeMillis() - column.create_time()));
-                            } else {
-                                logger.info("xxstalenessxx: " + (System.currentTimeMillis() - lastColumn.create_time()));
-                            }
-                            return new ChosenColumnResult(thriftifyIColumn(oldColumn), new HashSet<Long>());
-                        } else {
-                            return new ChosenColumnResult(thriftifyIColumn(checkedColumn), new HashSet<Long>());
-                        }
-                    }
-                    if (oldColumn.earliestValidTime() <= chosenTime || !versionItr.hasNext()) {
-                        // either satisfies read_ts and from different client
-                        // or this is the oldest version (default value): default version's EVT is not 0 while
-                        // we use read_ts = 0 to denote default versions.
-			if (lastColumn == null && (column instanceof PendingTransactionColumn)) {
-                            logger.info("xxstalenessxx: " + 0);
-                        } else if (lastColumn == null && !(column instanceof PendingTransactionColumn)) {
-                            logger.info("xxstalenessxx: " + (System.currentTimeMillis() - column.create_time()));
-                        } else {
-                            logger.info("xxstalenessxx: " + (System.currentTimeMillis() - lastColumn.create_time()));
-                        }
-                        return new ChosenColumnResult(thriftifyIColumn(oldColumn), new HashSet<Long>());
-                    }
-		    if (!(oldColumn instanceof PendingTransactionColumn)) {
-                        lastColumn = oldColumn;
-                    }
-                }
-                assert false : "Should never gets here.";
+                    return new ChosenColumnResult(thriftifyIColumn(column), new HashSet<Long>());
+                } // !!! LUCA EDIT HERE
+
+                //assert false : "Should never gets here.";
                 return new ChosenColumnResult(markFirstRoundResultAsValid(currentlyVisibleColumn), new HashSet<Long>());
             }
         }
