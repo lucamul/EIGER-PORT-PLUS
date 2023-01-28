@@ -435,12 +435,12 @@ public class ThriftConverter {
                     logger.info("xxstalenessxx: " + 0);
                     return new ChosenColumnResult(thriftifyIColumn(column), new HashSet<Long>());
                 }
-                if (column.earliestValidTime() <= chosenTime) {
-                    return new ChosenColumnResult(thriftifyIColumn(column), new HashSet<Long>());
-                } // !!! LUCA EDIT HERE
+                //if (column.earliestValidTime() <= chosenTime) {
+                return new ChosenColumnResult(thriftifyIColumn(column), new HashSet<Long>());
+                //} // !!! LUCA EDIT HERE
 
                 //assert false : "Should never gets here.";
-                return new ChosenColumnResult(markFirstRoundResultAsValid(currentlyVisibleColumn), new HashSet<Long>());
+                //return new ChosenColumnResult(markFirstRoundResultAsValid(currentlyVisibleColumn), new HashSet<Long>());
             }
         }
     }
