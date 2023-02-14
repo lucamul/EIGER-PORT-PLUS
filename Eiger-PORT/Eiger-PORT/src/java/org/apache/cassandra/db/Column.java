@@ -396,12 +396,12 @@ public class Column implements IColumn {
             }
 
             // HL: GC
-            if (LamportClock.gc_map.size() < LamportClock.num_clients) {
-                // should not do GC atm
-                return;
-            } else if (LamportClock.gc_map.size() > LamportClock.num_clients) {
-                assert false : "gc_map becomes inconsistent.";
-            }
+            // if (LamportClock.gc_map.size() < LamportClock.num_clients) {
+            //     // should not do GC atm
+            //     return;
+            // } else if (LamportClock.gc_map.size() > LamportClock.num_clients) {
+            //     assert false : "gc_map becomes inconsistent.";
+            // }
             long safe_time = Long.MAX_VALUE;
             for (Map.Entry<Long, Long> entry : LamportClock.gc_map.entrySet()) {
                 long ts = entry.getValue();

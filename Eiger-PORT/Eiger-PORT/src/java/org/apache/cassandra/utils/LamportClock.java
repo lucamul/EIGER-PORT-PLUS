@@ -37,7 +37,7 @@ public class LamportClock {
 
     // Haonan: clients readTS map for GC
     // hardcoded number of client machines:
-    public static final int num_clients = 8;
+    public static final int num_clients = 32;
     public static HashMap<Long, Long> gc_map = new HashMap<Long, Long>(num_clients);
     static Random rand = new Random();
     public static final long nodeIP
