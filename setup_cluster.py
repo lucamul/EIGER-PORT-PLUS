@@ -57,42 +57,6 @@ def setup(hosts, setup, plus, server_exp):
         with Pool(processes=len(hosts)) as pool:
             pool.starmap(run_cmd, [(host, cmd) for host in hosts])
 
-hosts_port_plus = [
-    "luca_mul@pc419.emulab.net", 		
-    "luca_mul@pc552.emulab.net", 		
-    "luca_mul@pc549.emulab.net", 		
-    "luca_mul@pc434.emulab.net", 		
-    "luca_mul@pc461.emulab.net", 		
-    "luca_mul@pc436.emulab.net", 		
-    "luca_mul@pc538.emulab.net", 		
-    "luca_mul@pc475.emulab.net", 		
-    "luca_mul@pc458.emulab.net", 		
-    "luca_mul@pc405.emulab.net", 		
-    "luca_mul@pc459.emulab.net", 		
-    "luca_mul@pc522.emulab.net", 		
-    "luca_mul@pc431.emulab.net", 		
-    "luca_mul@pc462.emulab.net", 		
-    "luca_mul@pc550.emulab.net", 		
-    "luca_mul@pc420.emulab.net", 		
-    "luca_mul@pc422.emulab.net", 		
-    "luca_mul@pc471.emulab.net", 		
-    "luca_mul@pc411.emulab.net", 		
-    "luca_mul@pc432.emulab.net", 		
-    "luca_mul@pc540.emulab.net", 		
-    "luca_mul@pc414.emulab.net", 		
-    "luca_mul@pc450.emulab.net", 		
-    "luca_mul@pc466.emulab.net", 		
-    "luca_mul@pc547.emulab.net", 		
-    "luca_mul@pc467.emulab.net", 		
-    "luca_mul@pc557.emulab.net", 		
-    "luca_mul@pc449.emulab.net", 		
-    "luca_mul@pc439.emulab.net", 		
-    "luca_mul@pc469.emulab.net", 		
-    "luca_mul@pc427.emulab.net", 		
-    "luca_mul@pc442.emulab.net", 		
-    "luca_mul@pc468.emulab.net" 		
-    ]
-
 hosts_port = [
     "luca_mul@pc415.emulab.net" 		
     ,"luca_mul@pc404.emulab.net" 		
