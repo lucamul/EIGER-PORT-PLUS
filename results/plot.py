@@ -62,7 +62,7 @@ def plot(path, title):
         generate_plot(x_axis, y_axises["latency"], "Latency" + titles[title], x_label,latency_label, path, bar, num)
         if title == "num_clients":
             num = nums[idx]
-            generate_plot(y_axises["throughput"],y_axises["latency"], "Latency vs. Throughput", x_label,throughput_label, path, bar, num)
+            generate_plot(y_axises["throughput"],y_axises["latency"], "Latency vs. Throughput",throughput_label, latency_label, path, bar, num)
             idx += 1
     return
 
@@ -122,7 +122,10 @@ def generate_plot(x_axis, y_axises, title, x_label, y_label, directory, barPlot 
         ax.set_ylabel(y_label, fontsize=axis_font)
         ax.tick_params(axis='both', which='major', labelsize=tick_font)
         ax.set_xticklabels(x_axis, fontsize=tick_font)
-        ax.legend()
+        legend = ax.legend(bbox_to_anchor=(0.5, 1.8), loc='center', ncol = len(algorithms),frameon = False ,prop = {"size" : 16}, fontsize = 12)
+        legend.get_frame().set_edgecolor('black')
+        legend.get_frame().set_linewidth(1.4)
+        export_legend(legend)
         if haveGrid:
             ax.grid(haveGrid, color='gray', linestyle='--', linewidth=1, axis='y')
         
@@ -156,7 +159,7 @@ def generate_plot(x_axis, y_axises, title, x_label, y_label, directory, barPlot 
     ax.set_xlabel(x_label, fontsize=axis_font)
     ax.set_ylabel(y_label, fontsize=axis_font)
     ax.tick_params(axis='both', which='major', labelsize=tick_font)
-    ax.legend()
+    #ax.legend()
     if haveGrid:
         ax.grid(haveGrid, color='gray', linestyle='--', linewidth=1, axis='y')
     title_no_spaces = title.replace(" ","_")
@@ -176,6 +179,11 @@ def generate_plot(x_axis, y_axises, title, x_label, y_label, directory, barPlot 
     if showPlot:
         plt.show()
     return
+def export_legend(legend, filename="legend.pdf"):
+    fig  = legend.figure
+    fig.canvas.draw()
+    bbox  = legend.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
+    fig.savefig(saveTo + filename, dpi="figure", bbox_inches=bbox)
 
 if __name__ == "__main__":
     plot_all()
