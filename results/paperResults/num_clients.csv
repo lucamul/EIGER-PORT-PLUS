@@ -1,4 +1,4 @@
-algorithm, num_clients, throughput, latency
+algorithm,num_clients,throughput,latency
 EIGER,2,6424,2726
 EIGER,4,7861,4277
 EIGER,8,9350,6542

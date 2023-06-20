@@ -1,6 +1,6 @@
 # Eiger-PORT+
 ## 1. Background
-Eiger-PORT+ presents an imrpovement over the Eiger-PORT algorithm (https://github.com/princeton-sns/Eiger-PORT). This codebase is built upon the original Eiger-PORT one, with modifications on the code where necessary, meaning the Eiger-PORT folder in this codebase presents an implementation of Eiger-PORT+.
+Eiger-PORT+ presents an improvement over the Eiger-PORT algorithm (https://github.com/princeton-sns/Eiger-PORT). This codebase is built upon the original Eiger-PORT one, with modifications on the code where necessary, meaning the Eiger-PORT folder in this codebase presents an implementation of Eiger-PORT+.
 
 ## 2. System Requirements
 The experiments were run using Emulab d170 nodes on Ubuntu 16.04 STD. Unless stated otherwise 16 clients and 16 servers were used, plus one node to run the code from.
@@ -9,7 +9,7 @@ The experiments were run using Emulab d170 nodes on Ubuntu 16.04 STD. Unless sta
 Everything can be built from setup_cluster.py:
  1. Insert the list of nodes of your cluster (extra node to run from in position 0 of the list, we 
  will call this node0). 
- 2. Run the script as: ```setup_cluster.py --setup``` to configure passwordless ssh in between every node.
+ 2. Run the script as: ```python3 setup_cluster.py --setup``` to configure passwordless ssh in between every node.
   3. Run the script as:  ```python3 setup_cluster.py``` if you want to run the original Eiger-PORT
   4. Run the script as:  ```python3 setup_cluster.py --plus``` if you want to run Eiger-PORT+
   5. Run the script as:  ```python3 setup_cluster.py --server_exp``` if you want to run the number of servers experiments and hence you ware working with 64+1 total machines.
@@ -59,5 +59,7 @@ In latency_throughput.bash
 ## 4. Process results
 The results of your experiment will be in ```cd /local/Eiger-PORT/eval-scripts/experiments/dynamic```, the latest experiment is in a folder called latest. Copy the data processing scripts into the experiment folder, then edit process_latency.bash according to your experiment options, finally run calc_latency_throughput.bash to calculate latency and throughput. 
 
+The results used in the publication can be found in ```results/paperResults``` as csv files.
+
 ## 5. More information
-For more information please visit the original  Eiger-PORT codebase which goes more into details.
+For more information please visit the original Eiger-PORT codebase which goes more into details.

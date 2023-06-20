@@ -1,5 +1,6 @@
 import argparse
 import os
+import shlex
 import string
 from multiprocessing import Pool
 import sys
@@ -24,12 +25,14 @@ def generate_command(plus = True, server_exp = False):
     return cmd
 
 def generate_setup_cmd(key):
-    cmd = " \"mkdir -p ~/.ssh && echo " + key + " >> ~/.ssh/authorized_keys && chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys\""
+    formatted_key = key.replace('\n', '').strip()
+    escaped_key = formatted_key.replace('"', r'\"')
+
+    cmd = f" \"mkdir -p ~/.ssh ; echo {escaped_key} >> ~/.ssh/authorized_keys ; chmod 700 ~/.ssh ; chmod 600 ~/.ssh/authorized_keys\""
     return cmd
 
 def run_cmd(h,command):
     print(h)
-    #os.system(f"cat ~/.ssh/id_rsa.pub | ssh -o StrictHostKeyChecking=no {host} \"sudo mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys\"")
     os.system("ssh -o StrictHostKeyChecking=no " + h + command)
 
 def run_setup(h,command):
@@ -42,14 +45,13 @@ def setup(hosts, setup, plus, server_exp):
     if setup:
         username, domain = hosts[0].split("@")
         cmd = "ssh-keygen -f \"/home/luca/.ssh/known_hosts\" -R \"" +  domain + "\""
+        
         os.system(cmd)
-        os.system(f'ssh -o StrictHostKeyChecking=no {hosts[0]} "ssh-keygen -t rsa -N \"\" -f ~/.ssh/id_rsa"')
 
-        key = os.popen(f'ssh -o StrictHostKeyChecking=no {hosts[0]} remote "cat ~/.ssh/id_rsa.pub"').read()
-
+        os.system(f'ssh -o StrictHostKeyChecking=no {hosts[0]} \"ssh-keygen -t rsa -N \'\' -f ~/.ssh/id_rsa\"')
+        key = os.popen(f'ssh -o StrictHostKeyChecking=no {hosts[0]} \"cat ~/.ssh/id_rsa.pub\"').read()
         cmd = generate_setup_cmd(key)
-
-        with Pool(process=len(hosts)-1) as pool:
+        with Pool(processes=len(hosts)-1) as pool:
             pool.starmap(run_setup, [(h,cmd) for h in hosts[1:]])
     else:
         cmd = generate_command(plus, server_exp)
@@ -57,73 +59,8 @@ def setup(hosts, setup, plus, server_exp):
         with Pool(processes=len(hosts)) as pool:
             pool.starmap(run_cmd, [(host, cmd) for host in hosts])
 
-hosts_port = [
-    "luca_mul@pc415.emulab.net" 		
-    ,"luca_mul@pc404.emulab.net" 		
-    ,"luca_mul@pc490.emulab.net" 		
-    ,"luca_mul@pc413.emulab.net" 		
-    ,"luca_mul@pc438.emulab.net" 		
-    ,"luca_mul@pc504.emulab.net" 		
-    ,"luca_mul@pc433.emulab.net" 		
-    ,"luca_mul@pc423.emulab.net" 		
-    ,"luca_mul@pc457.emulab.net" 		
-    ,"luca_mul@pc410.emulab.net" 		
-    ,"luca_mul@pc498.emulab.net" 		
-    ,"luca_mul@pc484.emulab.net" 		
-    ,"luca_mul@pc430.emulab.net" 		
-    ,"luca_mul@pc526.emulab.net" 		
-    ,"luca_mul@pc401.emulab.net" 		
-    ,"luca_mul@pc437.emulab.net" 		
-    ,"luca_mul@pc499.emulab.net" 		
-    ,"luca_mul@pc503.emulab.net" 		
-    ,"luca_mul@pc408.emulab.net" 		
-    ,"luca_mul@pc407.emulab.net" 		
-    ,"luca_mul@pc519.emulab.net" 		
-    ,"luca_mul@pc528.emulab.net" 		
-    ,"luca_mul@pc544.emulab.net" 		
-    ,"luca_mul@pc485.emulab.net" 		
-    ,"luca_mul@pc559.emulab.net" 		
-    ,"luca_mul@pc417.emulab.net" 		
-    ,"luca_mul@pc501.emulab.net" 		
-    ,"luca_mul@pc426.emulab.net" 		
-    ,"luca_mul@pc412.emulab.net" 		
-    ,"luca_mul@pc416.emulab.net" 		
-    ,"luca_mul@pc509.emulab.net" 		
-    ,"luca_mul@pc406.emulab.net" 		
-    ,"luca_mul@pc424.emulab.net" 		
-    ,"luca_mul@pc548.emulab.net" 		
-    ,"luca_mul@pc537.emulab.net" 		
-    ,"luca_mul@pc429.emulab.net" 		
-    ,"luca_mul@pc470.emulab.net" 		
-    ,"luca_mul@pc454.emulab.net" 		
-    ,"luca_mul@pc502.emulab.net" 		
-    ,"luca_mul@pc453.emulab.net" 		
-    ,"luca_mul@pc518.emulab.net" 		
-    ,"luca_mul@pc510.emulab.net" 		
-    ,"luca_mul@pc486.emulab.net" 		
-    ,"luca_mul@pc440.emulab.net" 		
-    ,"luca_mul@pc551.emulab.net" 		
-    ,"luca_mul@pc527.emulab.net" 		
-    ,"luca_mul@pc492.emulab.net" 		
-    ,"luca_mul@pc491.emulab.net" 		
-    ,"luca_mul@pc472.emulab.net" 		
-    ,"luca_mul@pc446.emulab.net" 		
-    ,"luca_mul@pc409.emulab.net" 		
-    ,"luca_mul@pc532.emulab.net" 		
-    ,"luca_mul@pc455.emulab.net" 		
-    ,"luca_mul@pc525.emulab.net" 		
-    ,"luca_mul@pc523.emulab.net" 		
-    ,"luca_mul@pc428.emulab.net" 		
-    ,"luca_mul@pc524.emulab.net" 		
-    ,"luca_mul@pc493.emulab.net" 		
-    ,"luca_mul@pc425.emulab.net" 		
-    ,"luca_mul@pc456.emulab.net" 		
-    ,"luca_mul@pc421.emulab.net" 		
-    ,"luca_mul@pc508.emulab.net" 		
-    ,"luca_mul@pc478.emulab.net" 		
-    ,"luca_mul@pc497.emulab.net" 		
-    ,"luca_mul@pc464.emulab.net"
-    ]
+hosts_port = [ # enter nodes here
+]
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run Eiger-PORT')
