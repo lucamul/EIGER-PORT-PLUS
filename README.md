@@ -3,8 +3,7 @@
 Eiger-PORT+ presents an improvement over the Eiger-PORT algorithm (https://github.com/princeton-sns/Eiger-PORT). This codebase is built upon the original Eiger-PORT one, with modifications on the code where necessary, meaning the Eiger-PORT folder in this codebase presents an implementation of Eiger-PORT+.
 
 ## 2. System Requirements
-The experiments were run using Emulab d170 nodes on Ubuntu 16.04 STD. Unless stated otherwise 16 clients and 16 servers were used, plus one node to run the code from.
-
+We use Eiger- PORT’s workload generator with default parameters of 32 threads per client, 1 million keys, 90% read proportion, and the Zipfian key-access distribution with a skew factor of 0.8. We deploy these three protocols on a CloudLab cluster of machines, each with 2.4 GHz Quad-Core Xeon CPU and 12 GB RAM. By default, we use eight servers to partition the database and eight client machines to load the servers. We plot each data point using the average over five 60-second trials.
 ## 3. Build
 Everything can be built from setup_cluster.py:
  1. Insert the list of nodes of your cluster (extra node to run from in position 0 of the list, we 
